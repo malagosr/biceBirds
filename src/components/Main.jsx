@@ -2,36 +2,35 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, FlatList } from 'react-native'
 
 const Main = () => {
-    const [data, setData] = useState(null)
-    const [names, setNames] = useState(null)
+    const [birds, setBirds] = useState(null)
+    const [prueba, setPrueba] = useState(null)
 
     const fetchData = async () => {
-        const response = await fetch('https://www.digi-api.com/api/v1/digimon')
+        const response = await fetch('https://aves.ninjas.cl/api/birds')
         const responseJson = await response.json()
-        const digimons = responseJson.content.map(digimon => digimon.name)
-        setNames(digimons)
-        setData(responseJson.content)
-        console.log(responseJson)
+        setBirds(responseJson)
+        setPrueba(responseJson.slice(0, 10))
+        console.log(setPrueba)
     }
 
     useEffect(() => {
         fetchData()
     }, [])
 
-    const Item = ({title}) => (
+    const Item = ({bird}) => (
         <View>
-          <Text>{title}</Text>
+          <Text>{bird.name}</Text>
         </View>
       );
 
     return (
         <View style={styles.container}>
             <Text>Main!</Text>
-            <FlatList
-                data={data}
-                renderItem={({item}) => <Item title={item.name} />}
+            {/* <FlatList
+                data={prueba}
+                renderItem={({item}) => <Item bird={item} />}
                 keyExtractor={item => item.id}
-            />
+            /> */}
         </View>
     )
 }

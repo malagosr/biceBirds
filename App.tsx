@@ -6,69 +6,46 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import BirdsList from './src/screens/BirdsList.jsx';
+import BirdProfile from './src/screens/BirdProfile.jsx';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-import Main from './src/components/Main';
+const Home = ({navigation}) => {
+  return (
+    <View style={styles.container}>
+      <BirdsList navigation={navigation} />
+    </View>
+  );
+};
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const BirdProfileScreen = ({navigation, route}) => (
+  <View style={styles.container}>
+    <BirdProfile navegation={navigation} route={route} />
+  </View>
+);
+
+const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Main/>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: true,
+        }}>
+        <Stack.Screen name="Birds" component={Home} />
+        <Stack.Screen name="Profile" component={BirdProfileScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });
 

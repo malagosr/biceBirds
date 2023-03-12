@@ -11,8 +11,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import BirdsList from './src/screens/BirdsList.jsx';
 import BirdProfile from './src/screens/BirdProfile.jsx';
-import {store} from './src/app/store';
-import {Provider} from 'react-redux'
+import store from './src/redux/store';
+import {Provider} from 'react-redux';
 
 const Home = ({navigation}) => {
   return (

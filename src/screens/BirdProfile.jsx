@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, Button } from 'react-native'
-import { birdInfo } from '../features/birds/birdsSlice'
-import { useSelector, useDispatch } from 'react-redux'
-
-
+import { Text, View, StyleSheet, Image, } from 'react-native'
 
 const BirdProfile = ({navegation, route: {params: {bird}}}) => {
 
-  const [data, setData] = useState({})
-  const [info, setInfo] = useState({})
-  const birdInfo = useSelector((state) => state.birdInfo)
-  const isLoading = useSelector((state) => state.isLoading)
-  const dispatch = useDispatch()
+  const [info, setInfo] = useState(null)
 
   fetchBirdData = async () => {
-    console.log('fetching data')
+    console.log('fetching data bird')
     const response = await fetch('https://aves.ninjas.cl/api/birds/'+bird.uid)
     const responseJson = await response.json()
-    setData(responseJson)
-    dispatch(birdInfo(data))
-    await dispatch(savedInfo())
-    console.log('info, ', info)
-    console.log('data, ', responseJson)
+    setInfo(responseJson)
   }
 
-    useEffect(() => {
-      console.log(navegation)
-      dispatch(callingApi())
-      fetchBirdData()
-      console.log(bird)
-      console.log(data)
-    }, [])
+  useEffect(() => {
+    fetchBirdData()
+    console.log(bird)
+  }, [])
 
+  renderMap = (info) => {
     return (
-      <View style={styles.container}>
-        <View style={styles.portrait}>
-          <Image style={styles.image} source={{url: bird.images.main}}/>
-          <View style={styles.names}>
-            <Text style={styles.textTitle}>{bird.name.spanish}</Text>
-            <Text style={styles.text}>{bird.name.latin}</Text>
-            <Text style={styles.text}>{bird.name.english}</Text>
-          </View>
-          {!isLoading && <View>
-            <Image style={styles.map} source={{url: info.map.image}}/>
-            <Text style={styles.text}>{info.map.title}</Text>
-          </View> }
+      <View style={styles.map}>
+        <Image style={styles.map} source={{url: info.map.image}}/>
+        <Text style={styles.text}>{info.map.title}</Text>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.portrait}>
+        <Image style={styles.image} source={{url: bird.images.main}}/>
+        <View style={styles.names}>
+          <Text style={styles.textTitle}>{bird.name.spanish}</Text>
+          <Text style={styles.text}>{bird.name.latin}</Text>
+          <Text style={styles.text}>{bird.name.english}</Text>
         </View>
-      </View> 
+        {info && renderMap(info)}
+      </View>
+    </View> 
     )
 }
 

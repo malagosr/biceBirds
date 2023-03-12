@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Button } from 'react-native'
-import { SwipeListView } from 'react-native-swipe-list-view';
-import HiddenItemWithActions from '../components/HiddenItemWithActions'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { addBirds, deleteBirds } from '../redux/action'
 
 const BirdList = ({navigation}) => {
     const [birds, setBirds] = useState([])
-    let row = [];
-    let prevOpenedRow;
+    const dispatch = useDispatch()
+    const algo = useSelector(state => state.birds)
 
     fetchData = async () => {
       console.log('fetching data')
       const response = await fetch('https://aves.ninjas.cl/api/birds')
-      const responseJson = await response.json()
-      setBirds(responseJson.slice(0, 20))
+      const responseJson = await response.json().slice(0, 20)
+      dispatch(addBirds(responseJson))
+      setBirds(responseJson)
+      console.log('aca', responseJson)
     }
 
     useEffect(() => {
-        fetchData()
+    fetchData()
     }, [])
+
+    onDeleteBird = (bird) => {
+      console.log('ondeletebird', bird.uid)
+      dispatch(deleteBirds(bird.uid))
+      console.log(algo) // rerender
+    }
 
     openPress = (bird) => {
       console.log('entramos al openPress');
-      navigation.navigate('Profile', {bird: bird})
+      // navigation.navigate('Profile', {bird: bird})
+      onDeleteBird(bird)
     }
 
 
-    renderItem = ({ item }) => {
-      console.log('entramos al renderItem', item)
+    renderItem = ({ item}) => {
       return (
         <TouchableOpacity onPress={() => openPress(item)}>
             <View style={styles.item}>
@@ -62,15 +71,7 @@ const BirdList = ({navigation}) => {
         return (
             <View style={styles.header}/> 
         )
-    }
-
-    const deleteItem = ({ item, index }) => {
-      console.log(item, index);
-      let a = listData;
-      a.splice(index, 1);
-      console.log(a);
-      setListData([...a]);
-    };
+      }
 
     return (
         <View style={styles.container}>

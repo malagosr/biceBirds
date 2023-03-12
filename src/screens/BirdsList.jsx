@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { addBird, removeBird } from '../features/birds/birdsSlice'
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Button } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 const BirdList = ({navigation}) => {
     const [birds, setBirds] = useState([])
-    const [prueba, setPrueba] = useState([])
+    const dispatch = useDispatch()
     let row = [];
     let prevOpenedRow;
 
@@ -13,11 +15,12 @@ const BirdList = ({navigation}) => {
       const response = await fetch('https://aves.ninjas.cl/api/birds')
       const responseJson = await response.json()
       setBirds(responseJson)
+      dispatch(addBird(responseJson))
       await console.log(responseJson.slice(0, 10))
     }
 
     useEffect(() => {
-        fetchData()
+    fetchData()
     }, [])
 
     openPress = (bird) => {
@@ -86,7 +89,7 @@ const BirdList = ({navigation}) => {
       let a = listData;
       a.splice(index, 1);
       console.log(a);
-      setListData([...a]);
+      setBirds([...a]);
     };
 
     return (

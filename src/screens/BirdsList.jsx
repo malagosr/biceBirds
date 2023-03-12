@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Button } from 'react-native'
+import { SwipeListView } from 'react-native-swipe-list-view';
+import HiddenItemWithActions from '../components/HiddenItemWithActions'
 
 const BirdList = ({navigation}) => {
     const [birds, setBirds] = useState([])
-    const [prueba, setPrueba] = useState([])
     let row = [];
     let prevOpenedRow;
 
@@ -11,8 +12,7 @@ const BirdList = ({navigation}) => {
       console.log('fetching data')
       const response = await fetch('https://aves.ninjas.cl/api/birds')
       const responseJson = await response.json()
-      setBirds(responseJson)
-      await console.log(responseJson.slice(0, 10))
+      setBirds(responseJson.slice(0, 20))
     }
 
     useEffect(() => {
@@ -25,34 +25,9 @@ const BirdList = ({navigation}) => {
     }
 
 
-    renderItem = ({ item, index }, onClick) => {
+    renderItem = ({ item }) => {
       console.log('entramos al renderItem', item)
-
-      const closeRow = (index) => {
-        console.log('closerow');
-        if (prevOpenedRow && prevOpenedRow !== row[index]) {
-          prevOpenedRow.close();
-        }
-        prevOpenedRow = row[index];
-      };
-
-      const renderRightActions = (progress, dragX, onClick) => {
-        console.log('entramos al renderRightActions')
-        return (
-          <View
-            style={{
-              margin: 0,
-              alignContent: 'center',
-              justifyContent: 'center',
-              width: 70,
-            }}>
-            <Button color="red" onPress={onClick} title="DELETE"></Button>
-          </View>
-        );
-      };
-
       return (
-
         <TouchableOpacity onPress={() => openPress(item)}>
             <View style={styles.item}>
               <Image style={styles.image} source={{url: item.images.thumb}}/>
@@ -65,6 +40,23 @@ const BirdList = ({navigation}) => {
         </TouchableOpacity>
       );
     };
+
+    const renderHiddenItem = (data, rowMap) => {
+      const rowActionAnimatedValue = new Animated.Value(75);
+      const rowHeightAnimatedValue = new Animated.Value(60);
+  
+      return (
+        <HiddenItemWithActions
+          data={data}
+          rowMap={rowMap}
+          rowActionAnimatedValue={rowActionAnimatedValue}
+          rowHeightAnimatedValue={rowHeightAnimatedValue}
+          onClose={() => closeRow(rowMap, data.item.key)}
+          onDelete={() => deleteRow(rowMap, data.item.key)}
+        />
+      );
+    };
+  
     
     const renderHeaderLine = () => {
         return (
@@ -84,15 +76,19 @@ const BirdList = ({navigation}) => {
         <View style={styles.container}>
           <ScrollView contentInsetAdjustmentBehavior="automatic">
             {birds && 
-              <FlatList
+              <SwipeListView
+                useFlatList={true}
                 data={birds}
-                renderItem={ item =>
-                  renderItem(item, () => {
-                    console.log('Pressed', v);
-                    deleteItem(v);
-                })}
-                key={item => item.id}
-                ListHeaderComponent={renderHeaderLine}
+                renderItem={renderItem}
+                renderHiddenItem={ (rowData, rowMap) => (
+                    <View style={styles.rowBack}>
+                        <TouchableOpacity onPress={ () => rowMap[rowData.item.key].closeRow() }>
+                            <Text>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+                leftOpenValue={75}
+                rightOpenValue={-150}
               />
             }
           </ScrollView>

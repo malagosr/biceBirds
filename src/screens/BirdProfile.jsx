@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, Button, ScrollView } from 'react-native'
-import SvgUri, { Path } from "react-native-svg";
+import { Text, View, StyleSheet, Image, } from 'react-native'
 
 const BirdProfile = ({navegation, route: {params: {bird}}}) => {
 
-  const [data, setData] = useState({})
+  const [info, setInfo] = useState(null)
 
   fetchBirdData = async () => {
-    console.log('fetching data')
+    console.log('fetching data bird')
     const response = await fetch('https://aves.ninjas.cl/api/birds/'+bird.uid)
     const responseJson = await response.json()
-    await setData(responseJson)
-    await console.log('data, ', data)
-    console.log('responseJson, ', responseJson)
+    setInfo(responseJson)
   }
 
   useEffect(() => {
@@ -113,6 +110,11 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
       paddingTop: 16,
+      paddingBottom: 40,
+    },
+    map: {
+      height: 250,
+      width : 250,
     }
   });
 

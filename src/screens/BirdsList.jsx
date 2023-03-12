@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Button } from 'react-native'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { addBirds, deleteBirds } from '../redux/action'
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const BirdList = ({navigation}) => {
     const [birds, setBirds] = useState([])
-    const [prueba, setPrueba] = useState([])
+    const dispatch = useDispatch()
+    const algo = useSelector(state => state.birds)
     let row = [];
     let prevOpenedRow;
 
@@ -12,99 +15,97 @@ const BirdList = ({navigation}) => {
       console.log('fetching data')
       const response = await fetch('https://aves.ninjas.cl/api/birds')
       const responseJson = await response.json()
-      setBirds(responseJson)
-      await console.log(responseJson.slice(0, 10))
+      dispatch(addBirds(responseJson))
+      setBirds(responseJson.splice(0,15))
     }
 
     useEffect(() => {
-        fetchData()
+    fetchData()
     }, [])
+
+    getMoreData = (index) => {
+      console.log('index', index)
+      let a = algo.splice(index, 10);
+      setBirds([...a]);
+    }
+
+    closeRow = (index) => {
+      console.log('closerow');
+      if (prevOpenedRow && prevOpenedRow !== row[index]) {
+        prevOpenedRow.close();
+      }
+      prevOpenedRow = row[index];
+    };
+
+    const deleteItem = ({ item, index }) => {
+      let a = algo;
+      a.splice(index, 1);
+      setBirds([...a]);
+    };
+
 
     openPress = (bird) => {
       console.log('entramos al openPress');
       navigation.navigate('Profile', {bird: bird})
     }
 
-
-    renderItem = ({ item, index }, onClick) => {
-      console.log('entramos al renderItem', item)
-
-    //   const closeRow = (index) => {
-    //     console.log('closerow');
-    //     if (prevOpenedRow && prevOpenedRow !== row[index]) {
-    //       prevOpenedRow.close();
-    //     }
-    //     prevOpenedRow = row[index];
-    //   };
-
-    //   const renderRightActions = (progress, dragX, onClick) => {
-    //     console.log('entramos al renderRightActions')
-    //     return (
-    //       <View
-    //         style={{
-    //           margin: 0,
-    //           alignContent: 'center',
-    //           justifyContent: 'center',
-    //           width: 70,
-    //         }}>
-    //         <Button color="red" onPress={onClick} title="DELETE"></Button>
-    //       </View>
-    //     );
-    //   };
-
+    const renderRightActions = (progress, dragX, onClick) => {
       return (
-
-        <TouchableOpacity onPress={() => openPress(item)}>
-          {/* <Swipeable
-            renderRightActions={(progress, dragX) =>
-              renderRightActions(progress, dragX, onClick)
-            }
-            onSwipeableOpen={() => closeRow(index)}
-            ref={(ref) => (row[index] = ref)}
-            rightOpenValue={-100}> */}
-            <View style={styles.item}>
-              <Image style={styles.image} source={{url: item.images.thumb}}/>
-              <View style={styles.names}>
-                <Text style={styles.textTitle}>{item.name.spanish}</Text>
-                <Text>{item.name.latin}</Text>
-                <Text>{item.name.english}</Text>
-              </View>
-            </View>
-          {/* </Swipeable> */}
-        </TouchableOpacity>
+        <View
+          style={{
+            margin: 0,
+            alignContent: 'center',
+            justifyContent: 'center',
+            width: 70,
+          }}>
+          <Button color="red" onPress={onClick} title="DELETE"></Button>
+        </View>
       );
     };
-    
-    const renderHeaderLine = () => {
-        return (
-            <View style={styles.header}/> 
-        )
-    }
 
-    const deleteItem = ({ item, index }) => {
-      console.log(item, index);
-      let a = listData;
-      a.splice(index, 1);
-      console.log(a);
-      setListData([...a]);
+
+    renderItem = ({ item, index }, onClick) => {
+      return (
+        <Swipeable
+          renderRightActions={(progress, dragX) =>
+            renderRightActions(progress, dragX, onClick)
+          }
+          onSwipeableOpen={() => closeRow(index)}
+          ref={(ref) => (row[index] = ref)}
+          rightOpenValue={-100}>
+          <TouchableOpacity onPress={() => openPress(item)}>
+              <View style={styles.item}>
+                <Image style={styles.image} source={{url: item.images.thumb}}/>
+                <View style={styles.names}>
+                  <Text style={styles.textTitle}>{item.name.spanish}</Text>
+                  <Text>{item.name.latin}</Text>
+                  <Text>{item.name.english}</Text>
+                </View>
+              </View>
+          </TouchableOpacity>
+        </Swipeable>
+      );
     };
 
     return (
         <View style={styles.container}>
-          <ScrollView contentInsetAdjustmentBehavior="automatic">
-            {birds && 
-              <FlatList
-                data={birds}
-                renderItem={ item =>
-                  renderItem(item, () => {
-                    console.log('Pressed', v);
-                    deleteItem(v);
-                })}
-                key={item => item.id}
-                ListHeaderComponent={renderHeaderLine}
-              />
-            }
-          </ScrollView>
+          {birds && 
+            <FlatList
+              data={birds}
+              ListHeaderComponentStyle={styles.header}
+              renderItem={(v, index) =>
+                renderItem(v, () => {
+                  console.log('Pressed', v);
+                  deleteItem(v);
+                })
+              }
+              onEndReachedThreshold={0.2}
+              onEndReached={(distance) => {
+                console.log('onEndReached', distance);
+                getMoreData(distance);
+              }}
+            />
+          }
         </View> 
     )
 }

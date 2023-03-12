@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Button } from 'react-native'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 const BirdList = ({navigation}) => {
     const [birds, setBirds] = useState([])
@@ -29,39 +28,32 @@ const BirdList = ({navigation}) => {
     renderItem = ({ item, index }, onClick) => {
       console.log('entramos al renderItem', item)
 
-    //   const closeRow = (index) => {
-    //     console.log('closerow');
-    //     if (prevOpenedRow && prevOpenedRow !== row[index]) {
-    //       prevOpenedRow.close();
-    //     }
-    //     prevOpenedRow = row[index];
-    //   };
+      const closeRow = (index) => {
+        console.log('closerow');
+        if (prevOpenedRow && prevOpenedRow !== row[index]) {
+          prevOpenedRow.close();
+        }
+        prevOpenedRow = row[index];
+      };
 
-    //   const renderRightActions = (progress, dragX, onClick) => {
-    //     console.log('entramos al renderRightActions')
-    //     return (
-    //       <View
-    //         style={{
-    //           margin: 0,
-    //           alignContent: 'center',
-    //           justifyContent: 'center',
-    //           width: 70,
-    //         }}>
-    //         <Button color="red" onPress={onClick} title="DELETE"></Button>
-    //       </View>
-    //     );
-    //   };
+      const renderRightActions = (progress, dragX, onClick) => {
+        console.log('entramos al renderRightActions')
+        return (
+          <View
+            style={{
+              margin: 0,
+              alignContent: 'center',
+              justifyContent: 'center',
+              width: 70,
+            }}>
+            <Button color="red" onPress={onClick} title="DELETE"></Button>
+          </View>
+        );
+      };
 
       return (
 
         <TouchableOpacity onPress={() => openPress(item)}>
-          {/* <Swipeable
-            renderRightActions={(progress, dragX) =>
-              renderRightActions(progress, dragX, onClick)
-            }
-            onSwipeableOpen={() => closeRow(index)}
-            ref={(ref) => (row[index] = ref)}
-            rightOpenValue={-100}> */}
             <View style={styles.item}>
               <Image style={styles.image} source={{url: item.images.thumb}}/>
               <View style={styles.names}>
@@ -70,7 +62,6 @@ const BirdList = ({navigation}) => {
                 <Text>{item.name.english}</Text>
               </View>
             </View>
-          {/* </Swipeable> */}
         </TouchableOpacity>
       );
     };

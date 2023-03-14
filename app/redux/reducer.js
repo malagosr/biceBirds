@@ -15,6 +15,7 @@ const birdsReducer = (state = initialState, action) => {
         }
         case DELETE_BIRD: {
             const {birdUid} = action.payload;
+            console.log(birdUid)
             return {
                 ...state,
                 birds: state.birds.filter(bird => bird.uid !== birdUid),

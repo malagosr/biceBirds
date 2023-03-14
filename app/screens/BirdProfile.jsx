@@ -9,6 +9,7 @@ import {
     RefreshControl,
 } from 'react-native';
 import {SvgCssUri} from 'react-native-svg';
+import { getInfo } from '../api';
 
 const BirdProfile = ({
     route: {
@@ -21,10 +22,8 @@ const BirdProfile = ({
 
     const fetchBirdData = async () => {
         try {
-            const response = await fetch(
-                'https://aves.ninjas.cl/api/birds/' + bird.uid,
-            );
-            const responseJson = await response.json();
+            const responseJson = await getInfo(bird.uid);
+            console.log(responseJson)
             setInfo(responseJson);
             setRefreshing(false);
         } catch (e) {

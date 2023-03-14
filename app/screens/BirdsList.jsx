@@ -24,9 +24,9 @@ const BirdList = ({navigation}) => {
     let prevOpenedRow;
 
     const fetchData = async () => {
-        console.log('fetching data');
         try {
-            const responseJson = await getItems()
+            const responseJson = await getItems();
+            console.log(responseJson)
             dispatch(addBirds(responseJson));
             setBirds(responseJson.slice(0, 10));
             setIsFetching(false);

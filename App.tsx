@@ -6,69 +6,54 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import BirdsList from './app/screens/BirdsList.jsx';
+import BirdProfile from './app/screens/BirdProfile.jsx';
+import store from './app/redux/store';
+import {Provider} from 'react-redux';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-import Main from './src/components/Main';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Home = ({navigation}) => {
+  return (
+    <View style={styles.container}>
+      <BirdsList navigation={navigation} />
+    </View>
+  );
+};
+
+const BirdProfileScreen = ({route}) => (
+  <View style={styles.container}>
+    <BirdProfile route={route} />
+  </View>
+);
+
+const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Main/>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <NavigationContainer>
+          <StatusBar
+            barStyle={'dark-content'}
+          />
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: true,
+              }}>
+              <Stack.Screen name="Aves" component={Home} />
+              <Stack.Screen name="Información" component={BirdProfileScreen} />
+            </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });
 

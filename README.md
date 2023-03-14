@@ -1,4 +1,9 @@
 # biceBirds
+Para levantar la app:
+- Es necesario hacer un npm install para instalar las dependencias.
+- Es necesario tener instalado cocoapods para levantar el proyecto en iOS.
+- Hay que hacer un pod install para instalar las dependencias de iOS.
+- Es necesario tener instalado Android Studio para levantar el proyecto en Android.
 
 Para correr la app:
 - Desde la terminal para levantar en simulador y dispositivo fisico iOS:

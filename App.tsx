@@ -6,13 +6,14 @@
  */
 
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import BirdsList from './src/screens/BirdsList.jsx';
-import BirdProfile from './src/screens/BirdProfile.jsx';
-import store from './src/redux/store';
+import BirdsList from './app/screens/BirdsList.jsx';
+import BirdProfile from './app/screens/BirdProfile.jsx';
+import store from './app/redux/store';
 import {Provider} from 'react-redux';
+
 
 const Home = ({navigation}) => {
   return (
@@ -22,9 +23,9 @@ const Home = ({navigation}) => {
   );
 };
 
-const BirdProfileScreen = ({navigation, route}) => (
+const BirdProfileScreen = ({route}) => (
   <View style={styles.container}>
-    <BirdProfile navegation={navigation} route={route} />
+    <BirdProfile route={route} />
   </View>
 );
 
@@ -34,13 +35,16 @@ function App(): JSX.Element {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: true,
-          }}>
-          <Stack.Screen name="Birds" component={Home} />
-          <Stack.Screen name="Profile" component={BirdProfileScreen} />
-        </Stack.Navigator>
+          <StatusBar
+            barStyle={'dark-content'}
+          />
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: true,
+              }}>
+              <Stack.Screen name="Aves" component={Home} />
+              <Stack.Screen name="Información" component={BirdProfileScreen} />
+            </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );

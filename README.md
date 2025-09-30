@@ -22,10 +22,6 @@ Aplicación mobile desarrollada en **React Native** para visualizar información
 ## 📸 Screenshots
 *(Agrega capturas reales del simulador o fotos del dispositivo)*  
 
-| Lista de aves | Detalle de especie |
-|---------------|---------------------|
-| ![Lista](docs/screenshots/list.png) | ![Detalle](docs/screenshots/detail.png) |
-
 👉 Guarda tus imágenes en `/docs/screenshots/` dentro del repo para mantenerlo ordenado.
 
 ---
@@ -60,14 +56,20 @@ bash:
 Se probaron las llamadas a APIs para asegurar resolución de promesas.
 Actualmente probado en dispositivo físico iOS (pendiente test Android).
 
+---
+
 ## 🔗 Demo con Expo
 
-(Aquí agregas el QR o link de Expo Go cuando lo publiques)
+Expo Go link
+
+---
 
 ## 📌 Notas
 
 Algunas aves no poseen información en IUCN → se muestra como No disponible.
 La app puede tardar algunos segundos en obtener los datos de cada llamada.
+
+---
 
 ## 📄 Licencia
 

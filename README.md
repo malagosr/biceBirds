@@ -1,22 +1,73 @@
-# biceBirds
-Para levantar la app:
-- Es necesario hacer un npm install para instalar las dependencias.
-- Es necesario tener instalado cocoapods para levantar el proyecto en iOS.
-- Hay que hacer un pod install para instalar las dependencias de iOS.
-- Es necesario tener instalado Android Studio para levantar el proyecto en Android.
+# 🐦 biceBirds
 
-Para correr la app:
-- Desde la terminal para levantar en simulador y dispositivo fisico iOS:
+Aplicación mobile desarrollada en **React Native** para visualizar información sobre aves de Chile.  
 
-$ npx react-native run-ios
+## ✨ Features
+- Listado de especies con imágenes.
+- Detalle de cada ave con información obtenida desde APIs externas.
+- Manejo de casos sin información (fallback “No disponible”).
+- Testeada en dispositivo físico iOS.
 
-- Desde la terminal para levantar en emulador de Android
+---
 
-$ npx react-native run-android
+## 🛠️ Tech Stack
+- **React Native** (Expo/CLI)
+- **Cocoapods** (iOS dependencies)
+- **Android Studio** (Android build)
+- **Jest** para pruebas unitarias
+- **APIs externas** (ej: IUCN Red List)
 
-Supuestos:
+---
 
-- La aplicación puede tomar unnos segundos en obtener la data de cada llamada.
-- Se hizo tests de las llamadas a las apis para ver que la promesa se resolviera correctamente.
-- Solo se probó en dispositivo físico iOS. No se probó en dispositivo Android.
-- Para el caso de las aves que no tienen información proveniente de IUCN, se deja como No disponible.
+## 📸 Screenshots
+*(Agrega capturas reales del simulador o fotos del dispositivo)*  
+
+| Lista de aves | Detalle de especie |
+|---------------|---------------------|
+| ![Lista](docs/screenshots/list.png) | ![Detalle](docs/screenshots/detail.png) |
+
+👉 Guarda tus imágenes en `/docs/screenshots/` dentro del repo para mantenerlo ordenado.
+
+---
+
+## 🚀 Instalación y ejecución
+
+### 1. Clonar repo e instalar dependencias
+
+bash:
+- git clone https://github.com/malagosr/biceBirds.git
+- cd biceBirds
+- npm install
+
+### 2. iOS
+
+bash:
+- cd ios
+- pod install
+- cd ..
+- npx react-native run-ios
+
+### 3. Android
+
+bash:
+- npx react-native run-android
+
+## 🧪 Testing
+
+bash:
+- npm test
+
+Se probaron las llamadas a APIs para asegurar resolución de promesas.
+Actualmente probado en dispositivo físico iOS (pendiente test Android).
+
+## 🔗 Demo con Expo
+
+(Aquí agregas el QR o link de Expo Go cuando lo publiques)
+
+## 📌 Notas
+
+Algunas aves no poseen información en IUCN → se muestra como No disponible.
+La app puede tardar algunos segundos en obtener los datos de cada llamada.
+
+## 📄 Licencia
+

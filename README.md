@@ -27,29 +27,24 @@ Aplicación mobile desarrollada en **React Native** para visualizar información
 ---
 
 ## 🚀 Instalación y ejecución
-
 ### 1. Clonar repo e instalar dependencias
-
 bash:
 - git clone https://github.com/malagosr/biceBirds.git
 - cd biceBirds
 - npm install
-
 ### 2. iOS
-
 bash:
 - cd ios
 - pod install
 - cd ..
 - npx react-native run-ios
-
 ### 3. Android
-
 bash:
 - npx react-native run-android
 
-## 🧪 Testing
+---
 
+## 🧪 Testing
 bash:
 - npm test
 
@@ -59,7 +54,6 @@ Actualmente probado en dispositivo físico iOS (pendiente test Android).
 ---
 
 ## 🔗 Demo con Expo
-
 Expo Go link
 
 ---
